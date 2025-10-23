@@ -1,0 +1,42 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /users
+
+
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/iot_users
+    username: andrei
+    password: andrei
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+    consumer:
+      group-id: user-service-group
+      auto-offset-reset: earliest
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+application:
+  security:
+    jwt:
+      secret-key: 2a6c4356f908d52b8b634b5129f89e1b93b7b648d8e4d69c8e8bdaffb8672e4d
+      expiration: 8640000
