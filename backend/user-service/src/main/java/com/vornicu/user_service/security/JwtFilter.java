@@ -1,4 +1,4 @@
-package com.vornicu.user_service;
+package com.vornicu.user_service.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,6 +29,12 @@ public class JwtFilter extends OncePerRequestFilter {
         final String jwt;
         final String email;
 
+        String path = request.getRequestURI();
+        if (path.startsWith("/auth/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if(authHeader==null || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request,response);
             return;
@@ -39,9 +45,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if(email!=null && SecurityContextHolder.getContext().getAuthentication()==null){
             UserDetails user = userDetailsService.loadUserByUsername(email);
-            if(jwtService.isTokenValid(jwt, (User) userDetailsService)){
+            if(jwtService.isTokenValid(jwt, user)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetailsService,
+                        user,
                         null,
                         user.getAuthorities()
                 );

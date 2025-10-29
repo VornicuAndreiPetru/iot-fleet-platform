@@ -1,10 +1,13 @@
-package com.vornicu.user_service;
+package com.vornicu.user_service.security;
 
 
+import com.vornicu.user_service.user.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -19,8 +22,9 @@ public class JwtService {
     @Value("${application.security.jwt.expiration}")
     private long jwtExpiration;
 
-    private Key getSignKey(){
-        return Keys.hmacShaKeyFor(secretKey.getBytes());
+    private Key getSignKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
     public String generateToken(User user) {
         return Jwts.builder()
@@ -40,9 +44,13 @@ public class JwtService {
                 .getSubject();
     }
 
-    public boolean isTokenValid(String token,User user){
-        return extractEmail(token).equals(user.getEmail()) && !isExpired(token);
-    }
+//    public boolean isTokenValid(String token,User user){
+//        return extractEmail(token).equals(user.getEmail()) && !isExpired(token);
+//    }
+    public boolean isTokenValid(String token, UserDetails userDetails){
+    final String username = extractEmail(token);
+    return (username.equals(userDetails.getUsername())) && !isExpired(token);
+}
 
     private boolean isExpired(String token) {
         Date expiration = Jwts.parserBuilder()

@@ -1,6 +1,11 @@
-package com.vornicu.user_service;
+package com.vornicu.user_service.auth;
 
 
+import com.vornicu.user_service.refreshToken.RefreshTokenService;
+import com.vornicu.user_service.security.JwtService;
+import com.vornicu.user_service.user.Role;
+import com.vornicu.user_service.user.User;
+import com.vornicu.user_service.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +25,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
 
 
 
@@ -33,6 +39,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .activationToken(UUID.randomUUID().toString())
                 .enabled(false)
+                .role(Role.ROLE_USER)
                 .build();
 
         userRepository.save(user);
@@ -56,9 +63,10 @@ public class AuthenticationService {
         }
 
         String jwtToken = jwtService.generateToken(user);
-
+        String refreshToken = refreshTokenService.generateRefreshToken(user.getId());
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -70,5 +78,18 @@ public class AuthenticationService {
         user.setEnabled(true);
         user.setActivationToken(null);
         userRepository.save(user);
+    }
+
+    public AuthenticationResponse refreshToken(String refreshToken) {
+        Integer userId = refreshTokenService.validateRefreshToken(refreshToken);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new RuntimeException("User not found"));
+
+        String newAccessToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(newAccessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

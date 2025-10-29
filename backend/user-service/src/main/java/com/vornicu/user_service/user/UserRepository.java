@@ -1,6 +1,7 @@
-package com.vornicu.user_service;
+package com.vornicu.user_service.user;
 
 
+import com.vornicu.user_service.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

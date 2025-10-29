@@ -1,4 +1,4 @@
-package com.vornicu.user_service;
+package com.vornicu.user_service.auth;
 
 
 import lombok.Builder;
@@ -10,5 +10,6 @@ import lombok.Setter;
 @Builder
 public class AuthenticationResponse {
     private String token;
+    private String refreshToken;
     private String message;
 }

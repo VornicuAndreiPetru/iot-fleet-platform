@@ -1,6 +1,7 @@
-package com.vornicu.user_service;
+package com.vornicu.user_service.security;
 
 
+import com.vornicu.user_service.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
