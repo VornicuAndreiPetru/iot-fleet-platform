@@ -9,7 +9,7 @@ spring:
     name: user-service
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/iot_users}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres:5432/iot_users}
     username: ${SPRING_DATASOURCE_USERNAME:andrei}
     password: ${SPRING_DATASOURCE_PASSWORD:andrei}
     driver-class-name: org.postgresql.Driver

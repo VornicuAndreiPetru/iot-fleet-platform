@@ -14,7 +14,7 @@ public class DeviceService {
     private final KafkaTemplate<String, Object> kafkaTemplate;
     public Device registerDevice(Device device) {
         Device saved = repository.save(device);
-        kafkaTemplate.send("devnice-events", saved);
+        kafkaTemplate.send("device-events", saved);
 
         return saved;
     }
