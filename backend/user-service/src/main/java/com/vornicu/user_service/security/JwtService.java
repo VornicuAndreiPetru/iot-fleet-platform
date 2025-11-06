@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
@@ -23,13 +24,16 @@ public class JwtService {
     private long jwtExpiration;
 
     private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+//        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+//        return Keys.hmacShaKeyFor(keyBytes);
+        return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
     public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("userId", user.getId())
+                .claim("username", user.getUsername())
+                .claim("role", user.getRole())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+jwtExpiration))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
@@ -49,9 +53,9 @@ public class JwtService {
 //        return extractEmail(token).equals(user.getEmail()) && !isExpired(token);
 //    }
     public boolean isTokenValid(String token, UserDetails userDetails){
-    final String username = extractEmail(token);
-    return (username.equals(userDetails.getUsername())) && !isExpired(token);
-}
+        final String username = extractEmail(token);
+        return (username.equals(userDetails.getUsername())) && !isExpired(token);
+    }
 
     private boolean isExpired(String token) {
         Date expiration = Jwts.parserBuilder()

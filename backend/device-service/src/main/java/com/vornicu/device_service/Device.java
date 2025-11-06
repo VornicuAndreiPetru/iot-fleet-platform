@@ -23,5 +23,5 @@ public class Device {
     private String type;
     private String status;
     private LocalDateTime registeredAt;
-    private Integer ownerId;
+    private String ownerEmail;
 }

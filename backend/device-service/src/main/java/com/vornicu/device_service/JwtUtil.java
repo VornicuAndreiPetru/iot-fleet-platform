@@ -15,13 +15,13 @@ public class JwtUtil {
     @Value("${jwt.secret-key}")
     private String secretKey;
 
-    public Integer extractUserId(String token){
+    public String extractEmail(String token){
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.get("userId", Integer.class);
+        return claims.getSubject();
     }
 
     private Key getSignKey() {

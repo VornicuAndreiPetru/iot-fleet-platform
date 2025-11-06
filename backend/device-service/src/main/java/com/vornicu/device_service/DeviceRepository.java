@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface DeviceRepository extends JpaRepository<Device, Integer> {
     Optional<Device> findByDeviceId(String deviceId);
-    List<Device> findByOwnerId(Integer ownerId);
+    List<Device> findByOwnerEmail(String email);
 }

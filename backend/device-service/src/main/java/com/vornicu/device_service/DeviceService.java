@@ -19,7 +19,7 @@ public class DeviceService {
         return saved;
     }
 
-    public List<Device> getDevicesByOwner(Integer userId) {
-        return repository.findByOwnerId(userId);
+    public List<Device> getDevicesByOwner(String email) {
+        return repository.findByOwnerEmail(email);
     }
 }
