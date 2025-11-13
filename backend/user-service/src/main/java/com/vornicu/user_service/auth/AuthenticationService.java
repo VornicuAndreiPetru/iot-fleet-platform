@@ -28,9 +28,8 @@ public class AuthenticationService {
     private final RefreshTokenService refreshTokenService;
 
 
-
     public AuthenticationResponse register(RegistrationRequest request) {
-        if(userRepository.existsByEmail(request.getEmail())){
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already registered!");
         }
         User user = User.builder()
@@ -58,7 +57,7 @@ public class AuthenticationService {
         );
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found!"));
-        if(!user.isEnabled()){
+        if (!user.isEnabled()) {
             throw new RuntimeException("Account not activated!");
         }
 
@@ -70,7 +69,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public void activateAccount(String token){
+    public void activateAccount(String token) {
         Optional<User> optionalUser = userRepository.findByActivationToken(token);
         User user = optionalUser.orElseThrow(
                 () -> new RuntimeException("Invalid activation token!")
@@ -84,7 +83,7 @@ public class AuthenticationService {
         Integer userId = refreshTokenService.validateRefreshToken(refreshToken);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(()->new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         String newAccessToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()

@@ -1,36 +1,33 @@
 package com.vornicu.device_service;
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/devices")
+@RequiredArgsConstructor
 public class DeviceController {
-    private final DeviceService deviceService;
-    private final JwtUtil jwtUtil;
+
+    private final DeviceRepository deviceRepository;
 
     @PostMapping
-    public ResponseEntity<Device> registerDevice(@RequestBody Device device, HttpServletRequest request){
-        String authHeader = request.getHeader("Authorization");
-        String token = authHeader.substring(7);
-        String email = jwtUtil.extractEmail(token);
-
+    public ResponseEntity<Device> addDevice(@AuthenticationPrincipal String email,
+                                            @RequestBody Device device) {
         device.setOwnerEmail(email);
-        Device saved = deviceService.registerDevice(device);
+        Device saved = deviceRepository.save(device);
         return ResponseEntity.ok(saved);
     }
 
     @GetMapping
-    public ResponseEntity<List<Device>> getMyDevices(HttpServletRequest request){
-        String authHeader = request.getHeader("Authorization");
-        String token = authHeader.substring(7);
-        String userId = jwtUtil.extractEmail(token);
-        return ResponseEntity.ok(deviceService.getDevicesByOwner(userId));
+    public ResponseEntity<List<Device>> getDevices(@AuthenticationPrincipal String email) {
+        List<Device> devices = deviceRepository.findAll().stream()
+                .filter(d -> d.getOwnerEmail().equals(email))
+                .toList();
+        return ResponseEntity.ok(devices);
     }
 }

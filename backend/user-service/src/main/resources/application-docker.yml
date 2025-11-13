@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/iot_users
+    username: andrei
+    password: andrei
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  data:
+    redis:
+      port: 6379
+
+application:
+  security:
+    jwt:
+      secret-key: 2a6c4356f908d52b8b634b5129f89e1b93b7b648d8e4d69c8e8bdaffb8672e4d

@@ -4,31 +4,21 @@ server:
     context-path: /devices
 
 spring:
-  application:
-    name: device-service
-
   datasource:
-    url: jdbc:postgresql://postgres:5432/iot_devices
-    username: andrei
-    password: andrei
-    driver-class-name: org.postgresql.Driver
-
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/iot_devices}
+    username: ${SPRING_DATASOURCE_USERNAME:andrei}
+    password: ${SPRING_DATASOURCE_PASSWORD:andrei}
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
-        format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+
   kafka:
-    bootstrap-servers: kafka:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-    template:
-      default-topic: device-events
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
 
 jwt:
   secret-key: 2a6c4356f908d52b8b634b5129f89e1b93b7b648d8e4d69c8e8bdaffb8672e4d
@@ -36,3 +26,4 @@ jwt:
 logging:
   level:
     org.springframework.kafka: INFO
+    org.springframework.security: DEBUG
