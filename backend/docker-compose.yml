@@ -14,6 +14,18 @@ services:
     networks:
       - iot-network
 
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: kafka:9092
+    depends_on:
+      - kafka
+    networks:
+      - iot-network
+
+
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafka
@@ -88,6 +100,25 @@ services:
       - kafka
       - redis
       - user-service
+    networks:
+      - iot-network
+
+  measurement-service:
+    image: vornicuandrei/measurement-service:latest
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/iot_measurements
+      SPRING_DATASOURCE_USERNAME: andrei
+      SPRING_DATASOURCE_PASSWORD: andrei
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+    depends_on:
+      - postgres
+      - kafka
+      - redis
     networks:
       - iot-network
 
