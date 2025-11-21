@@ -12,5 +12,6 @@ public class MeasurementResponse {
     private Integer id;
     private Integer deviceId;
     private Double value;
+    private Double temperature;
     private LocalDateTime timestamp;
 }

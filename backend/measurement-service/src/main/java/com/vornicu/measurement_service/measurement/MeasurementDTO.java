@@ -7,4 +7,5 @@ import lombok.Data;
 public class MeasurementDTO {
     private Integer deviceId;
     private Double value;
+    private Double temperature;
 }

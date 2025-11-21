@@ -9,4 +9,7 @@ import lombok.Data;
 public class MeasurementEvent {
     private Integer deviceId;
     private Double value;
+    private String ownerEmail;
+    private Double temperature;
+    private String timestamp;
 }

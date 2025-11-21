@@ -12,6 +12,6 @@ public class MeasurementProducer {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void sendMeasurement(MeasurementEvent event){
-        kafkaTemplate.send("measurements", event);
+        kafkaTemplate.send("measurement-alerts", event);
     }
 }

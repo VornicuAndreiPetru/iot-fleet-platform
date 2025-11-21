@@ -16,10 +16,12 @@ public class MeasurementService {
     private final MeasurementProducer producer;
 
 
-    public MeasurementResponse addMeasurement(MeasurementDTO request){
+    public MeasurementResponse addMeasurement(String email,MeasurementDTO request){
         Measurement measurement = Measurement.builder()
                 .deviceId(request.getDeviceId())
                 .value(request.getValue())
+                .temperature(request.getTemperature())
+                .ownerEmail(email)
                 .timestamp(LocalDateTime.now())
                 .build();
 
@@ -29,6 +31,9 @@ public class MeasurementService {
                 MeasurementEvent.builder()
                         .deviceId(saved.getDeviceId())
                         .value(saved.getValue())
+                        .temperature(saved.getTemperature())
+                        .ownerEmail(saved.getOwnerEmail())
+                        .timestamp(saved.getTimestamp().toString())
                         .build()
         );
 
@@ -36,6 +41,7 @@ public class MeasurementService {
                 .id(saved.getId())
                 .deviceId(saved.getDeviceId())
                 .value(saved.getValue())
+                .temperature(saved.getTemperature())
                 .timestamp(saved.getTimestamp())
                 .build();
     }

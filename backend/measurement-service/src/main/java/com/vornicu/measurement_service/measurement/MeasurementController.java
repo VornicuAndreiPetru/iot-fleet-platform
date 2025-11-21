@@ -18,6 +18,6 @@ public class MeasurementController {
 
     @PostMapping
     public ResponseEntity<MeasurementResponse> add(@AuthenticationPrincipal String email, @RequestBody MeasurementDTO request){
-        return ResponseEntity.ok(service.addMeasurement(request));
+        return ResponseEntity.ok(service.addMeasurement(email,request));
     }
 }

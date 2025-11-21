@@ -122,6 +122,27 @@ services:
     networks:
       - iot-network
 
+  notification-service:
+    image: vornicuandrei/notification-service:latest
+    container_name: notification-service
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SPRING_MAIL_USERNAME=${NOTIF_MAIL_USERNAME}
+      - SPRING_MAIL_PASSWORD=${NOTIF_MAIL_PASSWORD}
+      - NOTIFICATION_FROM=${NOTIF_FROM}
+      - SPRING_LOGGING_LEVEL_ROOT=INFO
+    depends_on:
+      - kafka
+      - redis
+    networks:
+      - iot-network
+
 volumes:
   postgres_data:
   redis_data:

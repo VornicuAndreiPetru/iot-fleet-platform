@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>IoT Alert</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            padding: 20px;
+        }
+
+        .card {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            color: #c0392b;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .icon {
+            margin-right: 10px;
+            font-size: 30px;
+        }
+
+        .section {
+            margin-top: 15px;
+            line-height: 1.5;
+            font-size: 16px;
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <div class="header">
+        <div class="icon">⚠️</div>
+        IoT Device Alert
+    </div>
+
+    <div class="section">
+        <strong>Device ID:</strong> {{deviceId}}<br/>
+        <strong>Value:</strong> {{value}}<br/>
+        <strong>Temperature:</strong> {{temperature}}°C<br/>
+        <strong>Timestamp:</strong> {{timestamp}}<br/>
+    </div>
+
+    <div class="section">
+        The device reported an abnormal measurement.
+        Please inspect the device or check environmental conditions.
+    </div>
+
+    <div class="footer">
+        This is an automated notification from your IoT Fleet System.
+    </div>
+</div>
+
+</body>
+</html>

@@ -22,7 +22,7 @@ public class Measurement {
 
     private Integer deviceId;
     private Double value;
-    private String unit;
+    private Double temperature;
     private LocalDateTime timestamp;
-//    private String ownerEmail;
+    private String ownerEmail;
 }
